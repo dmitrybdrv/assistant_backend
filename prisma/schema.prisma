@@ -5,14 +5,36 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// База которая будет создана и сохранена непостредственно в проекте (так как sqlite)
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
+// Модель - структура пользователя: createdReviewrBot - массив ботов, которых пользователь может создавать, настраивать и сохранять
 model User {
-id String @id @default(uuid())
-name String
-password String
-email String
+  id                 String        @id @default(uuid())
+  name               String
+  password           String
+  email              String
+  //marketplaceAccount Account?
+  createdReviewerBot ReviewerBot[]
+}
+
+// Модель Account - должна содержать данные которые приходят по API с ozon. Данные пользователя ozon, чтобы подтягивать отзывы конкретного пользователя
+// model Account {
+//   id       String @id @default(uuid())
+//   login    String
+//   password String
+//   user     User?  @relation(fields: [userId], references: [id])
+//   userId   String?
+// }
+
+// Бот рецензер - преднастроенный бот, которго создаёт пользователь сохраняя все параметры настроек (текст - правило ответа)
+model ReviewerBot {
+  id         String  @id @default(uuid())
+  name       String
+  user       User   @relation(fields: [userId], references: [id])
+  userId     String?
+  answerRule String
 }
