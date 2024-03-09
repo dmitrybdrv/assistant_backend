@@ -33,7 +33,7 @@ model User {
 // Бот рецензер - преднастроенный бот, которго создаёт пользователь сохраняя все параметры настроек (текст - правило ответа)
 model ReviewerBot {
   id         String  @id @default(uuid())
-  name       String
+  botName       String
   user       User?   @relation(fields: [userId], references: [id])
   userId     String
   answerRule String
