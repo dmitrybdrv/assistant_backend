@@ -62,11 +62,11 @@ const createBot = async (req, res) => {
  */
 const deleteBot = async (req, res) => {
     try {
-        const botId = req.params.id;
+        const { id } = req.body;
 
         const deletedBot = await prisma.prisma.reviewerBot.delete({
             where: {
-                id: botId,
+                id,
             },
         });
 

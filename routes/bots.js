@@ -11,9 +11,9 @@ router.get('/', auth, all)
 // Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция createBot
 router.post('/add', auth, createBot)
 
-// /api/bot/remove/:id
+// /api/bot/remove
 // Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция deleteBot
-router.delete('/remove/:id', auth, deleteBot)
+router.delete('/remove', auth, deleteBot)
 
 
 
