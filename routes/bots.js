@@ -4,18 +4,27 @@ const {auth} = require('../middleware/auth')
 const {all, botById, createBot, deleteBot} = require('../controllers/bots')
 
 // /api/bot
+// Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция all
 router.get('/', auth, all)
 
-// /api/bot/:id
-router.get('/:id', auth, botById)
-
 // /api/bot/add
+// Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция createBot
 router.post('/add', auth, createBot)
 
+// /api/bot/remove/:id
+// Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция deleteBot
+router.delete('/remove/:id', auth, deleteBot)
+
+
+
+// /api/bot/:id
+// Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция botById
+router.get('/:id', auth, botById)
+
 // /api/bot/edit
+// Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция
 router.put('/edit', auth, () => { console.log('edit bot') })
 
-// /api/bot/remove/:id
-router.delete('/remove/:id', auth, deleteBot)
+
 
 module.exports = router;

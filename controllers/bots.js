@@ -25,27 +25,6 @@ const all = async (req, res) => {
 }
 
 /**
- * @route GET /api/bot/:id
- * @desc Получение одного бота
- * @Access Private
- */
-const botById = async (req, res) => {
-
-    try {
-
-        const bot = await prisma.prisma.reviewerBot.findFirst(
-            res.status(200).json(prisma.prisma.reviewerBot)
-        )
-
-    } catch (e) {
-        res.status(400).json({
-            message: 'Не удалось получить бота'
-        })
-    }
-
-}
-
-/**
  * @route POST /api/bot/add
  * @desc Создание бота
  * @Access Private
@@ -59,14 +38,10 @@ const createBot = async (req, res) => {
             return res.status(400).json({message: 'Заполните все поля'})
         }
 
-        const bot = await prisma.prisma.user.update({
-            where: {
-                id: req.user.id
-            },
+        const bot = await prisma.prisma.reviewerBot.create({
             data: {
-                createdReviewerBot: {
-                    create: data
-                }
+                ...data,
+                userId: req.user.id
             }
         })
 
@@ -109,5 +84,30 @@ const deleteBot = async (req, res) => {
         });
     }
 }
+
+
+
+/**
+ * @route GET /api/bot/:id
+ * @desc Получение одного бота
+ * @Access Private
+ */
+const botById = async (req, res) => {
+
+    try {
+
+        const bot = await prisma.prisma.reviewerBot.findFirst(
+            res.status(200).json(prisma.prisma.reviewerBot)
+        )
+
+    } catch (e) {
+        res.status(400).json({
+            message: 'Не удалось получить бота'
+        })
+    }
+
+}
+
+
 
 module.exports = {all, botById, createBot, deleteBot}
