@@ -1,30 +1,26 @@
 const express = require('express');
 const router = express.Router()
 const {auth} = require('../middleware/auth')
-const {all, botById, createBot, deleteBot} = require('../controllers/bots')
+const {getAllBots, botById, createBot, deleteBot, editBot} = require('../controllers/bots')
 
 // /api/bot
-// Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция all
-router.get('/', auth, all)
+// Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция getAllBots
+router.get('/', auth, getAllBots)
 
 // /api/bot/add
 // Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция createBot
 router.post('/add', auth, createBot)
 
-// /api/bot/remove
+// /api/bot/remove/:id
 // Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция deleteBot
-router.delete('/remove', auth, deleteBot)
+router.delete('/remove/:id', auth, deleteBot)
 
+// /api/bot/edit/:id
+// Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция editBot
+router.put('/edit/:id', auth, editBot)
 
-
-// /api/bot/:id
+// /api/bot/find/:id
 // Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция botById
-router.get('/:id', auth, botById)
-
-// /api/bot/edit
-// Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция
-router.put('/edit', auth, () => { console.log('edit bot') })
-
-
+router.get('/find/:id', auth, botById)
 
 module.exports = router;

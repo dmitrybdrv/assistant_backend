@@ -5,7 +5,7 @@ const prisma = require('../prisma/prisma-client')
  * @desc Получение всех ботов
  * @Access Private
  */
-const all = async (req, res) => {
+const getAllBots = async (req, res) => {
 
     try {
         const userId = req.user.id
@@ -62,7 +62,7 @@ const createBot = async (req, res) => {
  */
 const deleteBot = async (req, res) => {
     try {
-        const { id } = req.body;
+        const {id} = req.body;
 
         const deletedBot = await prisma.prisma.reviewerBot.delete({
             where: {
@@ -71,9 +71,9 @@ const deleteBot = async (req, res) => {
         });
 
         if (deletedBot) {
-            res.status(200).json({ message: 'Бот удалён!' });
+            res.status(200).json({message: 'Бот удалён!'});
         } else {
-            res.status(404).json({ message: 'Бот не найден' });
+            res.status(404).json({message: 'Бот не найден'});
         }
 
     } catch (e) {
@@ -85,6 +85,34 @@ const deleteBot = async (req, res) => {
     }
 }
 
+/**
+ * @route PUT /api/bot/edit
+ * @desc Редактирование бота
+ * @Access Private
+ */
+const editBot = async (req, res) => {
+
+    try {
+        const data = req.body
+
+        const bot = await prisma.prisma.reviewerBot.update({
+            where: {
+                id: data.id,
+            },
+            data: {
+                ...data,
+            }
+        })
+
+        return res.status(200).json({bot, message: 'Отредактировано!'})
+
+    } catch (e) {
+        res.status(500).json({
+            message: 'Не удалось изменить'
+        })
+    }
+
+}
 
 
 /**
@@ -94,20 +122,25 @@ const deleteBot = async (req, res) => {
  */
 const botById = async (req, res) => {
 
+    const {id} = req.params
+
     try {
 
-        const bot = await prisma.prisma.reviewerBot.findFirst(
-            res.status(200).json(prisma.prisma.reviewerBot)
-        )
+        const bot = await prisma.prisma.reviewerBot.findUnique({
+            where: {
+                id
+            }
+        })
+
+        res.status(200).json({bot, message: 'Бот найден'})
 
     } catch (e) {
         res.status(400).json({
-            message: 'Не удалось получить бота'
+            message: 'Не удалось найти бота'
         })
     }
 
 }
 
 
-
-module.exports = {all, botById, createBot, deleteBot}
+module.exports = {getAllBots, createBot, deleteBot, editBot, botById }
