@@ -5,8 +5,8 @@ const {prisma} = require('../prisma/prisma-client')
 приватный роут
  */
 const auth = async (req, res, next) => {
-    try {
 
+    try {
         //достаём приходящий с фронта (клиента) токен - зашифрованный id пользователя (если он есть)
         let token = req.headers.authorization?.split(' ')[1]
         //расшифровываем токен (id)
