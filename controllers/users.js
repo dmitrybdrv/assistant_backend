@@ -13,6 +13,7 @@ const login = async (req, res) => {
     try {
 
         const {email, password, rememberMe} = req.body
+
         //условие - на отсутствие введёного email или password при авторизации
         if (!email || !password) {
             return res.status(400).json({message: 'Пожалуйста, заполните обязательные поля'});

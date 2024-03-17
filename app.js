@@ -2,6 +2,11 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const cors = require('cors');
+
+// Разрешить запросы с любых источников
+app.use(cors());
+
 
 /*
 необходим для активации работы .env
