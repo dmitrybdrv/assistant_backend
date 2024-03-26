@@ -4,9 +4,6 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
-// Разрешить запросы с любых источников
-app.use(cors());
-
 
 /*
 необходим для активации работы .env
@@ -14,6 +11,9 @@ app.use(cors());
 require('dotenv').config()
 
 const app = express();
+
+// Разрешить запросы с любых источников
+app.use(cors());
 
 /*
 подключение логгера

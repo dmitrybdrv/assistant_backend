@@ -39,11 +39,13 @@ const login = async (req, res) => {
 
         //условие - на соответствие логина и пароля (+наличие secret записи в .env) найденного в базе пользователя, введённым данным для авторизации
         if (isPasswordCorrect && user && secret) {
+            //Если у пользователя уже есть имя, тогда отправить имя иначе ГОСТЬ
+            const userName = user.name ? user.name : 'Guest'
             //при соответствии - положительный ответ (объект с данными)
             return res.status(200).json({
                 id: user.id,
                 email: user.email,
-                name: user.name,
+                name: userName,
                 token: jwt.sign({id: user.id}, secret, {expiresIn: '1d'})
             })
         } else {
