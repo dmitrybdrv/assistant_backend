@@ -110,6 +110,7 @@ const register = async (req, res) => {
         const secret = process.env.JWT_SECRET
 
         //условие - если пользователь создан и secret в наличии, возвращается объект с id, email, token
+        //TODO нужно ли возвращать всё при регистрации или вернуть только token?!
         if (newUser && secret) {
             res.status(201).json({
                 id: newUser.id,
