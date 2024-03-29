@@ -118,7 +118,8 @@ const register = async (req, res) => {
                 email: newUser.email,
                 //создание jwt токена, который обнулиться через 1 день.
                 //TODO изменить период протухания токена на меньшее значение
-                token: jwt.sign({id: newUser.id}, secret, {expiresIn: '1d'})
+                //При регистрации не отправлять токен
+                //token: jwt.sign({id: newUser.id}, secret, {expiresIn: '1d'})
             })
         } else {
             return res.status(400).json({
