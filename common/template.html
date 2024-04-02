@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div>
+    <h1>{{#if loh}}Здравствуйте, {{loh}}!{{else}}Здравствуйте!{{/if}}</h1>
+    <div>
+        <p style="font-size: 16px">
+            Мы получили запрос на сброс пароля в сервисе OzonAssistant.
+            Перейдя по ссылке вы создадите новый пароль для входа в приложение:
+            {{#if RESET_PASSWORD}} {{RESET_PASSWORD}} !{{else}}Временно недоступно{{/if}}
+        </p>
+    </div>
+    <div>
+        <p style="font-size: 14px; color: #444443">
+            {{#if}}
+            Если Вы не оправляли запрос на сброс пароля в сервисе OzonAssistant и не хотите больше получать от нас письма,
+            вы можете свяжитесь с нами напишите нам на эл.почту с просьбой "Не беспокоить" и мы более не будем отправлять вам письма
+            {{/if}}
+        </p>
+    </div>
+</div>
+</body>
+</html>
