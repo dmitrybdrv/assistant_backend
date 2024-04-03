@@ -6,12 +6,6 @@ const path = require('path');
 const fs = require("fs")
 const handlebars = require('handlebars')
 
-//импорт письма - шаблона для перехода по ссылке на сброс пароля (создание нового пароля)
-const filePath = path.join(__dirname, '..', '/common/template.html')
-//поддержка передачи utf8 ?
-const fileContent = fs.readFileSync(filePath, 'utf8')
-//создание шаблона
-const template = handlebars.compile(fileContent)
 
 const RESET_PASSWORD = process.env.RESET_PASSWORD
 const PASSWORD_FOR_SMTP = process.env.PASSWORD_FOR_SMTP
@@ -64,11 +58,11 @@ const login = async (req, res) => {
                 token: jwt.sign({id: user.id}, secret, {expiresIn: '1d'})
             })
         } else {
-            return res.status(400).json({ message: 'Не верно введён логин или пароль' })
+            return res.status(400).json({message: 'Не верно введён логин или пароль'})
         }
 
     } catch (e) {
-        res.status(400).json({ message: 'Что-то пошло не так' })
+        res.status(400).json({message: 'Что-то пошло не так'})
     }
 
 }
@@ -142,7 +136,7 @@ const register = async (req, res) => {
         }
 
     } catch (e) {
-        res.status(400).json({ message: 'Что-то пошло не так' })
+        res.status(400).json({message: 'Что-то пошло не так'})
     }
 
 }
@@ -186,8 +180,55 @@ const recover = async (req, res) => {
             })
         }
 
+        //импорт письма - шаблона для перехода по ссылке на сброс пароля (создание нового пароля)
+        //const filePath = path.join(__dirname, '..', 'src/common/template.html')
+
+        //поддержка передачи utf8 ?
+        //const fileContent = fs.readFileSync(filePath, 'utf8')
+        //создание шаблона
+        //const template = handlebars.compile(fileContent)
+
+        // Подготовка данных для шаблона
+        // const templateData = {
+        //     userName: foundedUser.name,
+        //     resetLink: RESET_PASSWORD,
+        // };
+
+        // Генерация HTML-кода на основе шаблона и данных
+        //const html = template({RESET_PASSWORD});
+
         //передача данных в файл common/template.html для настройки отправляемого письма
-        //const html = template({ RESET_PASSWORD });
+        const html =
+            `
+            <!doctype html>
+            <html lang="en">
+            <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div>
+    <h1>Здравствуйте, ${foundedUser.name ? foundedUser.name : 'друг'}!</h1>
+    <div>
+        <p style="font-size: 18px">
+            Мы получили запрос на сброс пароля в сервисе OzonAssistant.
+            Перейдя по ссылке вы создадите новый пароль для входа в приложение:
+            ${RESET_PASSWORD}.
+        </p>
+    </div>
+    <div>
+        <p style="font-size: 14px; color: #808080">
+            Если Вы не оправляли запрос на сброс пароля в сервисе OzonAssistant и не хотите больше получать от нас письма,
+            вы можете свяжитесь с нами. Напишите нам на эл.почту с просьбой "Не беспокоить" и мы более не будем отправлять вам письма
+        </p>
+    </div>
+</div>
+</body>
+</html>
+            `
 
 
         //создание и настройка транспорта
@@ -207,36 +248,7 @@ const recover = async (req, res) => {
             to: 'nixpromto@yandex.ru',
             subject: 'Сброс пароля',
             text: "Plaintext version of the message",
-            html: '<!doctype html>\n' +
-                '<html lang="en">\n' +
-                '<head>\n' +
-                '    <meta charset="UTF-8">\n' +
-                '    <meta name="viewport"\n' +
-                '          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">\n' +
-                '    <meta http-equiv="X-UA-Compatible" content="ie=edge">\n' +
-                '    <title>Document</title>\n' +
-                '</head>\n' +
-                '<body>\n' +
-                '<div>\n' +
-                '    <h1>Здравствуйте, {foundedUser}</h1>\n' +
-                '    <div>\n' +
-                '        <p style="font-size: 16px">\n' +
-                '            Мы получили запрос на сброс пароля в сервисе OzonAssistant.\n' +
-                '            Перейдя по ссылке вы создадите новый пароль для входа в приложение:\n' +
-                '            {RESET_PASSWORD}\n' +
-                '        </p>\n' +
-                '    </div>\n' +
-                '    <div>\n' +
-                '        <p style="font-size: 14px; color: #444443">\n' +
-                '            ' +
-                '            Если Вы не оправляли запрос на сброс пароля в сервисе OzonAssistant и не хотите больше получать от нас письма,\n' +
-                '            вы можете свяжитесь с нами напишите нам на эл.почту с просьбой "Не беспокоить" и мы более не будем отправлять вам письма\n' +
-                '            ' +
-                '        </p>\n' +
-                '    </div>\n' +
-                '</div>\n' +
-                '</body>\n' +
-                '</html>',
+            html,
         }
 
         //ответ на запрос /api/user/recovery
@@ -247,7 +259,7 @@ const recover = async (req, res) => {
 
     } catch (e) {
 
-        res.status(400).json({ message: 'Что-то пошло не так на бэке' })
+        res.status(400).json({message: 'Что-то пошло не так на бэке'})
     }
 }
 
