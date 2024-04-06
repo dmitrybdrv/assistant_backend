@@ -157,7 +157,7 @@ const current = async (req, res) => {
 }
 
 /**
- * Восстановление пароля
+ * Восстановление пароля,сброс ссылки на почту
  * @route POST /api/user/recovery
  * @Access Public
  */
@@ -216,7 +216,7 @@ const recover = async (req, res) => {
         <p style="font-size: 18px">
             Мы получили запрос на сброс пароля в сервисе OzonAssistant.
             Перейдя по ссылке вы создадите новый пароль для входа в приложение:
-            ${RESET_PASSWORD}.
+            ${RESET_PASSWORD}${foundedUser.id}
         </p>
     </div>
     <div>
