@@ -1,5 +1,5 @@
 const express = require('express');
-const {register, current, login, recover} = require("../controllers/users");
+const {register, current, login, recovery, createNewPassword} = require("../controllers/users");
 const router = express.Router();
 const {auth} = require('../middleware/auth')
 
@@ -12,7 +12,10 @@ router.post('/register', register);
 /* /api/user/current */
 router.get('/current', auth, current);
 
-/* /api/user/recovery */
-router.post('/recovery', recover)
+/* /api/user/forgot-password */
+router.post('/forgot-password', recovery)
+
+/* /api/user/create-new-password */
+router.post('/create-new-password', auth, createNewPassword)
 
 module.exports = router;

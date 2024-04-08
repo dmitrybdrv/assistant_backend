@@ -157,11 +157,11 @@ const current = async (req, res) => {
 }
 
 /**
- * Восстановление пароля,сброс ссылки на почту
- * @route POST /api/user/recovery
+ * Восстановление пароля => сброс ссылки на почту
+ * @route POST /api/user/forgot-password
  * @Access Public
  */
-const recover = async (req, res) => {
+const recovery = async (req, res) => {
     try {
 
         const {email} = req.body
@@ -260,7 +260,47 @@ const recover = async (req, res) => {
     } catch (e) {
 
         res.status(400).json({message: 'Что-то пошло не так на бэке'})
+
     }
 }
 
-module.exports = {login, register, current, recover}
+/**
+ * Создание нового пароля
+ * @route POST /api/user/create-new-password
+ * @Access Private
+ */
+const createNewPassword = async (req, res) => {
+
+    try {
+
+        const {newpassword} = req.body
+
+        //условие - на отсутствие введёного password для создания нокого
+        if (!newpassword) {
+            res.status(400).json({message: 'Введите новый пароль'})
+        }
+        //условие - на отсутствие введёного password для создания нокого
+        if (newpassword.length <= 5 || newpassword.length > 30) {
+            res.status(400).json({message: 'Длина пароля от 6 до 30 имволов'})
+        }
+
+        //зашифровывание нового пароля (для последующей перезаписи в базу зашифрованного пароля)
+        const salt = await bcrypt.genSalt(10)
+        const hashedNewPassword = await bcrypt.hash(newpassword, salt)
+
+        //Замена старого пароля
+        await prisma.prisma.user.update({
+            data: {
+                password: hashedNewPassword,
+            }
+        })
+
+        res.status(200).json({message: 'Пароль успешно заменён!'})
+
+    } catch (e) {
+        res.status(400).json({message: 'Что-то пошло не так на бэке'})
+    }
+
+}
+
+module.exports = {login, register, current, recovery, createNewPassword}
