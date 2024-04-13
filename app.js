@@ -22,7 +22,7 @@ app.use(cors());
 app.use(logger('dev'));
 
 /*
-в запросах посылать body через express
+возможность в запросах посылать body через express
  */
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

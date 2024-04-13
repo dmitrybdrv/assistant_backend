@@ -46,6 +46,9 @@ const login = async (req, res) => {
         //создание jwt токена
         const secret = process.env.JWT_SECRET
 
+        //не протухаемый токен в течении 1 дня
+        const notExpiresToken = rememberMe ? '3d' : '1'
+
         //условие - на соответствие логина и пароля (+наличие secret записи в .env) найденного в базе пользователя, введённым данным для авторизации
         if (isPasswordCorrect && user && secret) {
             //Если у пользователя уже есть имя, тогда отправить имя иначе ГОСТЬ
@@ -55,14 +58,15 @@ const login = async (req, res) => {
                 id: user.id,
                 email: user.email,
                 name: userName,
-                token: jwt.sign({id: user.id}, secret, {expiresIn: '1d'})
+                token: jwt.sign({id: user.id}, secret, {expiresIn: notExpiresToken})
             })
         } else {
             return res.status(400).json({message: 'Не верно введён логин или пароль'})
         }
 
-    } catch (e) {
-        res.status(400).json({message: 'Что-то пошло не так'})
+    }
+    catch (e) {
+        res.status(400).json({message: 'Что-то пошло не так!'})
     }
 
 }
@@ -162,6 +166,7 @@ const current = async (req, res) => {
  * @Access Public
  */
 const recovery = async (req, res) => {
+    debugger
     try {
 
         const {email} = req.body
@@ -215,14 +220,14 @@ const recovery = async (req, res) => {
     <div>
         <p style="font-size: 18px">
             Мы получили запрос на сброс пароля в сервисе OzonAssistant.
-            Перейдя по ссылке вы создадите новый пароль для входа в приложение:
+            Перейдя по ссылке необходимо создать новый пароль для входа в приложение:
             ${RESET_PASSWORD}${foundedUser.id}
         </p>
     </div>
     <div>
         <p style="font-size: 14px; color: #808080">
-            Если Вы не оправляли запрос на сброс пароля в сервисе OzonAssistant и не хотите больше получать от нас письма,
-            вы можете свяжитесь с нами. Напишите нам на эл.почту с просьбой "Не беспокоить" и мы более не будем отправлять вам письма
+            Если вы не оправляли запрос на сброс пароля в сервисе OzonAssistant или вы не хотите больше получать от нас письма,
+            свяжитесь с нами, написав нам на эл.почту <strong>ozonassist@support.ru</strong> .
         </p>
     </div>
 </div>
