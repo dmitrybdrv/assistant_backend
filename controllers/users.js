@@ -65,8 +65,7 @@ const login = async (req, res) => {
             return res.status(400).json({message: 'Не верно введён логин или пароль'})
         }
 
-    }
-    catch (e) {
+    } catch (e) {
         res.status(400).json({message: 'Что-то пошло не так!'})
     }
 
@@ -203,26 +202,30 @@ const recovery = async (req, res) => {
         // Генерация HTML-кода на основе шаблона и данных
         //const html = template({RESET_PASSWORD});
 
+        //создание jwt токена (закодированного id)
+        const secret = process.env.JWT_SECRET
+        const token = jwt.sign({id: foundedUser.id}, secret, {expiresIn: '1d'})
+
         //передача данных в файл common/template.html для настройки отправляемого письма
         const html =
             `
             <!doctype html>
             <html lang="en">
             <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<div>
+                <meta charset="UTF-8">
+                <meta name="viewport"
+                content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+                <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                <title>Document</title>
+            </head>
+                    <body>
+                     <div>
     <h1>Здравствуйте, ${foundedUser.name ? foundedUser.name : 'друг'}!</h1>
     <div>
         <p style="font-size: 18px">
             Мы получили запрос на сброс пароля в сервисе OzonAssistant.
             Перейдя по ссылке необходимо создать новый пароль для входа в приложение:
-            ${RESET_PASSWORD}${foundedUser.id}
+            ${RESET_PASSWORD}${token}
         </p>
     </div>
     <div>
@@ -232,9 +235,8 @@ const recovery = async (req, res) => {
         </p>
     </div>
 </div>
-</body>
-</html>
-            `
+                    </body>
+            </html>`
 
 
         //создание и настройка транспорта
@@ -262,11 +264,10 @@ const recovery = async (req, res) => {
 
         res.status(200).send({message: 'Инструкции отправлены на почту'})
 
-
     } catch (e) {
 
         res.status(400).json({message: 'Что-то пошло не так на бэке'})
-
+        console.log(e)
     }
 }
 
@@ -279,11 +280,12 @@ const createNewPassword = async (req, res) => {
 
     try {
 
-        const {password, id} = req.body
+        const {password} = req.body
+        const user = req.user
 
         //условие - на отсутствие введёного password для создания нокого
         if (!password) {
-           res.status(400).json({message: 'Введите новый пароль'})
+            res.status(400).json({message: 'Введите новый пароль'})
         }
         //условие - на отсутствие введёного password для создания нокого
         if (password.length <= 5 || password.length > 30) {
@@ -295,17 +297,17 @@ const createNewPassword = async (req, res) => {
         const hashedNewPassword = await bcrypt.hash(password, salt)
 
         //Замена старого пароля
-
+        // await prisma.prisma.user.update({
+        //     where: { id: user.id },
+        //     data: { password: hashedNewPassword }
+        // });
         await prisma.prisma.user.update({
-            where: {
-                id
-            },
-            data: {
-                password: hashedNewPassword // Заменить старый пароль на новый зашифрованный пароль
-            }
+            where: { id: user.id }, // Используйте идентификатор пользователя, чтобы найти его в базе данных
+            data: { password: hashedNewPassword }
         });
 
-        res.status(200).json({message: 'Пароль изменён!'})
+
+        res.status(200).json({message: 'Пароль успешно изменён'})
 
     } catch (e) {
         res.status(400).json({message: 'Что-то пошло не так на бэке'})

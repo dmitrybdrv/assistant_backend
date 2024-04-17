@@ -16,6 +16,6 @@ router.get('/current', auth, current);
 router.post('/forgot-password', recovery)
 
 /* /api/user/create-new-password */
-router.post('/create-new-password', createNewPassword)
+router.post('/create-new-password', auth, createNewPassword)
 
 module.exports = router;
