@@ -296,16 +296,11 @@ const createNewPassword = async (req, res) => {
         const salt = await bcrypt.genSalt(10)
         const hashedNewPassword = await bcrypt.hash(password, salt)
 
-        //Замена старого пароля
-        // await prisma.prisma.user.update({
-        //     where: { id: user.id },
-        //     data: { password: hashedNewPassword }
-        // });
+        //Замена пароля у найденного пользователя
         await prisma.prisma.user.update({
-            where: { id: user.id }, // Используйте идентификатор пользователя, чтобы найти его в базе данных
+            where: { id: user.id },
             data: { password: hashedNewPassword }
         });
-
 
         res.status(200).json({message: 'Пароль успешно изменён'})
 
