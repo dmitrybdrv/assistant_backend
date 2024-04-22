@@ -12,8 +12,8 @@ router.post('/register', register);
 /* /api/user/current */
 router.get('/current', auth, current);
 
-/* /api/user/forgot-password */
-router.post('/forgot-password', recovery)
+/* /api/user/recovery-password */
+router.post('/recovery-password', recovery)
 
 /* /api/user/create-new-password */
 router.post('/create-new-password', auth, createNewPassword)

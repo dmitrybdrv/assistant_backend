@@ -162,7 +162,7 @@ const current = async (req, res) => {
 
 /**
  * Восстановление пароля => сброс ссылки на почту
- * @route POST /api/user/forgot-password
+ * @route POST /api/user/recovery-password
  * @Access Public
  */
 const recovery = async (req, res) => {
