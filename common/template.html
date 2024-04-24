@@ -5,24 +5,26 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Восстановление доступа в сервисе OzonAssistant</title>
 </head>
-<body>
+<body style="background-color: #e2f6e2; border-radius: 10px; padding: 10px">
 <div>
-    <h1>Здравствуйте</h1>
+    <h1>Здравствуйте, {{#if foundedUser.name}}{{foundedUser.name}}{{else}}Друг{{/if}}!</h1>
     <div>
-        <p style="font-size: 16px">
-            Мы получили запрос на сброс пароля в сервисе OzonAssistant.
-            Перейдя по ссылке вы создадите новый пароль для входа в приложение:
-            {{#if RESET_PASSWORD}} {{RESET_PASSWORD}} !{{else}}Временно недоступно{{/if}}
+        <p style="font-size: 14px">
+            Мы получили от вас запрос на сброс пароля в сервисе OzonAssistant.
+        </p>
+        <br>
+        <p>
+            Перейдя по ссылке, создайте новый пароль для входа в приложение:
+            {{RESET_PASSWORD}}{{token}}
         </p>
     </div>
     <div>
-        <p style="font-size: 14px; color: #444443">
-            {{#if}}
-            Если Вы не оправляли запрос на сброс пароля в сервисе OzonAssistant и не хотите больше получать от нас письма,
-            вы можете свяжитесь с нами. Напишите нам на эл.почту с просьбой "Не беспокоить" и мы более не будем отправлять вам письма
-            {{/if}}
+        <p style="font-size: 14px; background-color: #f8a108; color: #000000; border-radius: 10px; padding: 10px">
+            ВНИМАНИЕ! Если вы не оправляли запрос на сброс пароля в сервисе OzonAssistant или вы не хотите больше получать от нас
+            письма,
+            свяжитесь с нами, написав нам на эл.почту ozonassist@support.ru
         </p>
     </div>
 </div>

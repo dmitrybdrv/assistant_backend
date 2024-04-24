@@ -5,8 +5,6 @@ const nodemailer = require('nodemailer')
 const path = require('path');
 const fs = require("fs")
 const handlebars = require('handlebars')
-const {log} = require("debug");
-
 
 const RESET_PASSWORD = process.env.RESET_PASSWORD
 const PASSWORD_FOR_SMTP = process.env.PASSWORD_FOR_SMTP
@@ -185,59 +183,27 @@ const recovery = async (req, res) => {
             })
         }
 
-        //импорт письма - шаблона для перехода по ссылке на сброс пароля (создание нового пароля)
-        //const filePath = path.join(__dirname, '..', 'src/common/template.html')
-
-        //поддержка передачи utf8 ?
-        //const fileContent = fs.readFileSync(filePath, 'utf8')
-        //создание шаблона
-        //const template = handlebars.compile(fileContent)
-
-        // Подготовка данных для шаблона
-        // const templateData = {
-        //     userName: foundedUser.name,
-        //     resetLink: RESET_PASSWORD,
-        // };
-
-        // Генерация HTML-кода на основе шаблона и данных
-        //const html = template({RESET_PASSWORD});
-
         //создание jwt токена (закодированного id)
         const secret = process.env.JWT_SECRET
         const token = jwt.sign({id: foundedUser.id}, secret, {expiresIn: '1d'})
 
-        //передача данных в файл common/template.html для настройки отправляемого письма
-        const html =
-            `
-            <!doctype html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport"
-                content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-                <meta http-equiv="X-UA-Compatible" content="ie=edge">
-                <title>Document</title>
-            </head>
-                    <body>
-                     <div>
-    <h1>Здравствуйте, ${foundedUser.name ? foundedUser.name : 'друг'}!</h1>
-    <div>
-        <p style="font-size: 18px">
-            Мы получили запрос на сброс пароля в сервисе OzonAssistant.
-            Перейдя по ссылке необходимо создать новый пароль для входа в приложение:
-            ${RESET_PASSWORD}${token}
-        </p>
-    </div>
-    <div>
-        <p style="font-size: 14px; color: #808080">
-            Если вы не оправляли запрос на сброс пароля в сервисе OzonAssistant или вы не хотите больше получать от нас письма,
-            свяжитесь с нами, написав нам на эл.почту <strong>ozonassist@support.ru</strong> .
-        </p>
-    </div>
-</div>
-                    </body>
-            </html>`
+        //импорт письма - шаблона для перехода по ссылке на сброс пароля (создание нового пароля)
+        const filePath = path.join(__dirname, '..', '/common/template.html')
 
+        //поддержка передачи utf8 ?
+        const fileContent = fs.readFileSync(filePath, 'utf8')
+        //создание шаблона
+        const template = handlebars.compile(fileContent)
+
+        // Подготовка данных для шаблона
+         const templateData = {
+             userName: foundedUser.name,
+             resetLink: RESET_PASSWORD,
+             token,
+         }
+
+        // Генерация HTML-кода на основе шаблона и данных
+        const html = template({RESET_PASSWORD, foundedUser, token});
 
         //создание и настройка транспорта
         const transporter = nodemailer.createTransport({
