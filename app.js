@@ -13,7 +13,10 @@ require('dotenv').config()
 const app = express();
 
 // Разрешить запросы с любых источников
-app.use(cors());
+app.use(cors({
+    origin: true,
+    credentials: true
+}));
 
 
 /*
