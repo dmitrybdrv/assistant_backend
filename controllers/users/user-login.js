@@ -37,8 +37,8 @@ const login = async (req, res) => {
         //создание jwt токена
         const secret = process.env.JWT_SECRET
 
-        //не протухаемый токен в течении 1 дня
-        const notExpiresToken = rememberMe ? '3d' : '1'
+        //не протухаемый токен в течении 3 дней
+        const notExpiresToken = rememberMe ? '3d' : '1h'
 
         //условие - на соответствие логина и пароля (+наличие secret записи в .env) найденного в базе пользователя, введённым данным для авторизации
         if (isPasswordCorrect && user && secret) {
