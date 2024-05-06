@@ -6,6 +6,7 @@ const {login} = require("../controllers/users/user-login")
 const {register} = require("../controllers/users/user-register")
 const {current} = require("../controllers/users/user-current")
 const {recovery} = require("../controllers/users/user-recovery")
+const {logout} = require("../controllers/users/user-logout")
 
 /* /api/user/login */
 router.post('/login', login);
@@ -21,5 +22,8 @@ router.post('/recovery-password', recovery)
 
 /* /api/user/create-new-password */
 router.post('/create-new-password', auth, createNewPassword)
+
+/* /api/user/logout */
+router.post('/logout', logout)
 
 module.exports = router;

@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 
 /**
  *
- * @route POST /apt/user/login
+ * @route POST /api/user/login
  * @desc Логин
  * @access Public
  */
