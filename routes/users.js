@@ -24,6 +24,6 @@ router.post('/recovery-password', recovery)
 router.post('/create-new-password', auth, createNewPassword)
 
 /* /api/user/logout */
-router.post('/logout', logout)
+router.post('/logout', auth, logout)
 
 module.exports = router;

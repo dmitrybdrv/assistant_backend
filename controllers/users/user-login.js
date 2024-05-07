@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 /**
  *
  * @route POST /api/user/login
- * @desc Логин
+ * @desc Логинизация
  * @access Public
  */
 const login = async (req, res) => {
@@ -31,7 +31,8 @@ const login = async (req, res) => {
             },
         });
 
-        //Верный пароль - если пользователь нашёлся в базе и введённый пароль соответствует паролю в базе
+        //Сравнение пароля - если пользователь нашёлся в базе и введённый пароль соответствует паролю в базе (сравнение
+        // введённого пользователем пароля с хэшированным паролем, хранящимся в базе данных)
         const isPasswordCorrect = user && (await bcrypt.compare(password, user.password));
 
         //создание jwt токена
@@ -42,21 +43,21 @@ const login = async (req, res) => {
 
         //условие - на соответствие логина и пароля (+наличие secret записи в .env) найденного в базе пользователя, введённым данным для авторизации
         if (isPasswordCorrect && user && secret) {
-            //Если у пользователя уже есть имя, тогда отправить имя иначе ГОСТЬ
-            const userName = user.name ? user.name : 'Guest'
+
             //при соответствии - положительный ответ (объект с данными)
             return res.status(200).json({
-                id: user.id,
-                email: user.email,
-                name: userName,
-                token: jwt.sign({id: user.id}, secret, {expiresIn: notExpiresToken})
+                message: `С возвращением ${user.name}`,
+                token: jwt.sign({id: user.id}, secret, {expiresIn: notExpiresToken}),
+                // name: user.name,
+                // email: user.email,
+                // createdBots: user.createdReviewerBot
             })
         } else {
             return res.status(400).json({message: 'Не верно введён логин или пароль'})
         }
 
     } catch (e) {
-        res.status(400).json({message: 'Что-то пошло не так!'})
+        res.status(400).json({message: 'Что-то пошло не так на бэке!'})
     }
 
 }

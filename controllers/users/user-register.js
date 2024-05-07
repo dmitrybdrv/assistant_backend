@@ -17,6 +17,11 @@ const register = async (req, res) => {
             return res.status(400).json({message: 'Пожалуйста, заполните обязательные поля'});
         }
 
+        //условие - поверка валидности пароля (длина)
+        if (password.length <= 5 || password.length > 30) {
+            return res.status(400).json({message: 'Пароль должен состоять от 6 до 30 символов'});
+        }
+
         //поиск уже существующего в базе пользователя
         const alreadyRegisteredUser = await prisma.prisma.user.findFirst({
             where: {
@@ -24,17 +29,9 @@ const register = async (req, res) => {
             }
         })
 
-        //условие - поверка валидности пароля (длина)
-        if (password.length <= 5 || password.length > 30) {
-            return res.status(400).json({message: 'Пароль должен состоять от 6 до 30 символов'});
-        }
-
         //условие - если уже существует в базе
         if (alreadyRegisteredUser) {
-            return res.status(400).json({
-                message: 'Пользователь с таким email уже существует'
-            })
-        }
+            return res.status(400).json({message: 'Пользователь с таким email уже существует'})}
 
         //зашифровывание пароля (для последующей записи в базу зашифрованного пароля)
         const salt = await bcrypt.genSalt(10)
@@ -53,24 +50,23 @@ const register = async (req, res) => {
         const secret = process.env.JWT_SECRET
 
         //условие - если пользователь создан и secret в наличии, возвращается объект с id, email, token
-        //TODO нужно ли возвращать всё при регистрации или вернуть только token?!
         if (newUser && secret) {
             res.status(201).json({
-                id: newUser.id,
-                name: newUser.name,
-                email: newUser.email,
+                message: 'Вы зарегистрированы, теперь можете войти в аккаунт'
+                // id: newUser.id,
+                // name: newUser.name,
+                // email: newUser.email,
                 //создание jwt токена, который обнулиться через 1 день.
-                //TODO изменить период протухания токена на меньшее значение
                 //token: jwt.sign({id: newUser.id}, secret, {expiresIn: '1d'})
             })
         } else {
             return res.status(400).json({
-                message: 'Не удалось создать пользователя'
+                message: 'Не удалось зарегистрироваться!'
             })
         }
 
     } catch (e) {
-        res.status(400).json({message: 'Что-то пошло не так'})
+        res.status(400).json({message: 'Что-то пошло не так на бэке'})
     }
 
 }
