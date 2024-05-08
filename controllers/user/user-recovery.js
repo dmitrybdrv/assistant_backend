@@ -47,13 +47,6 @@ const recovery = async (req, res) => {
         //создание шаблона
         const template = handlebars.compile(fileContent)
 
-        // Подготовка данных для шаблона
-        const templateData = {
-            userName: foundedUser.name,
-            resetLink: RESET_PASSWORD,
-            token,
-        }
-
         // Генерация HTML-кода на основе шаблона и данных
         const html = template({RESET_PASSWORD, foundedUser, token});
 
