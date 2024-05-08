@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router()
-const {createNewPassword} = require("../controllers/user/user-createNewPassword")
 const {auth} = require('../middleware/auth')
-const {login} = require("../controllers/user/user-login")
-const {register} = require("../controllers/user/user-register")
-const {current} = require("../controllers/user/user-current")
-const {recovery} = require("../controllers/user/user-recovery")
-const {logout} = require("../controllers/user/user-logout")
+const {login} = require("../controllers/user/login")
+const {register} = require("../controllers/user/register")
+const {current} = require("../controllers/user/current")
+const {recovery} = require("../controllers/user/recovery-user-password")
+const {createNewPassword} = require("../controllers/user/create-new-password")
+const {logout} = require("../controllers/user/logout")
 
 /* /api/user/login */
 router.post('/login', login);

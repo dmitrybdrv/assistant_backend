@@ -19,15 +19,14 @@ const auth = async (req, res, next) => {
                 id: decoded.id
             }
         })
-        //если пользователь найден
+
+        //если пользователь найден передаём его дальше
         req.user = user
 
         next()
 
     } catch (error) {
-        res.status(401).json({
-            message: 'Не авторизован'
-        })
+        res.status(401).json({message: 'Не авторизован'})
     }
 }
 

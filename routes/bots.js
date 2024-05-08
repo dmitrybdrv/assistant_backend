@@ -1,7 +1,11 @@
-const express = require('express');
+const express = require('express')
 const router = express.Router()
 const {auth} = require('../middleware/auth')
-const {getAllBots, botById, createBot, deleteBot, editBot} = require('../controllers/bots')
+const {getBotById} = require('../controllers/bot/get-bot')
+const {getAllBots} = require('../controllers/bot/get-all-bots')
+const {createBot} = require('../controllers/bot/create-new-bot')
+const {deleteBot} = require('../controllers/bot/delete-bot')
+const {editBot} = require('../controllers/bot/edit-bot')
 
 // /api/bot
 // Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция getAllBots
@@ -21,6 +25,6 @@ router.put('/edit/:id', auth, editBot)
 
 // /api/bot/find/:id
 // Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция botById
-router.get('/find/:id', auth, botById)
+router.get('/find/:id', auth, getBotById)
 
 module.exports = router;

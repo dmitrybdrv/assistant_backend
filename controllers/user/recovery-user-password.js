@@ -73,7 +73,7 @@ const recovery = async (req, res) => {
         //ответ на запрос /api/user/recovery
         await transporter.sendMail(mailOptions)
 
-        res.status(200).send({message: 'Инструкции отправлены на почту'})
+        res.status(200).send({message: `Инструкции отправлены на почту ${email}`})
 
     } catch (e) {
 
