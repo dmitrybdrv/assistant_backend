@@ -46,7 +46,7 @@ const login = async (req, res) => {
 
             //при соответствии - положительный ответ (объект с данными)
             return res.status(200).json({
-                message: `С возвращением ${user.name}`,
+                message: `Добро пожаловать ${user.name}!`,
                 token: jwt.sign({id: user.id}, secret, {expiresIn: notExpiresToken}),
                 // name: user.name,
                 // email: user.email,

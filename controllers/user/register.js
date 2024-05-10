@@ -23,14 +23,14 @@ const register = async (req, res) => {
         }
 
         //поиск уже существующего в базе пользователя
-        const alreadyRegisteredUser = await prisma.prisma.user.findFirst({
+        const alreadyRegisteredCompany = await prisma.prisma.company.findFirst({
             where: {
                 email,
             }
         })
 
         //условие - если уже существует в базе
-        if (alreadyRegisteredUser) {
+        if (alreadyRegisteredCompany) {
             return res.status(400).json({message: 'Пользователь с таким email уже существует'})}
 
         //зашифровывание пароля (для последующей записи в базу зашифрованного пароля)
@@ -38,7 +38,7 @@ const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt)
 
         //создание нового пользователя (если не найден в базе)
-        const newUser = await prisma.prisma.user.create({
+        const newCompany = await prisma.prisma.company.create({
             data: {
                 name,
                 email,
@@ -47,10 +47,10 @@ const register = async (req, res) => {
         })
 
         //создание jwt токена
-        const secret = process.env.JWT_SECRET
+       const secret = process.env.JWT_SECRET
 
         //условие - если пользователь создан и secret в наличии, возвращается объект с id, email, token
-        if (newUser && secret) {
+        if (newCompany && secret) {
             res.status(201).json({
                 message: 'Вы зарегистрированы, теперь можете войти в аккаунт'
                 // id: newUser.id,

@@ -11,31 +11,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Модель - структура пользователя: createdReviewrBot - массив ботов, которых пользователь может создавать, настраивать и сохранять
-model User {
-  id                 String        @id @default(uuid())
-  name               String
-  password           String
-  email              String
-  // marketplaceAccount Account?
-  createdReviewerBot ReviewerBot[]
+// Справочник - Организация.
+model Company {
+  id          String       @id @unique @default(uuid())
+  name        String
+  password    String
+  email       String
+  users       User[]
+  GlobalPromt GlobalPromt?
 }
 
-// Модель Account - должна содержать данные которые приходят по API с ozon. Данные пользователя ozon, чтобы подтягивать отзывы конкретного пользователя
-// model Account {
-//   id       String @id @default(uuid())
-//   login    String
-//   password String
-//   user     User?  @relation(fields: [userId], references: [id])
-//   userId   String?
-// }
+// Справочник - Пользователь
+model User {
+  id        String  @id @default(uuid())
+  name      String // ФИО
+  email     String
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String  @unique
+}
 
-// Бот рецензер - преднастроенный бот, которго создаёт пользователь сохраняя все параметры настроек (текст - правило ответа)
-model ReviewerBot {
-  id             String @id @default(uuid())
-  botName        String
-  botPromtPreset String
-  // следующие две строчки создают связь модели ReviewerBot с User
-  user           User?  @relation(fields: [userId], references: [id])
-  userId         String
+// Глобальный промт - настройки администратора системы
+model GlobalPromt {
+  id        String  @id @default(uuid()) // Ссылка
+  value     String
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId String  @unique
 }

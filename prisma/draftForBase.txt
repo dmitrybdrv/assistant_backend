@@ -1,0 +1,68 @@
+// Справочник - Площадка (OZON, WB, YM)
+model MarketPlace {
+  id                     String   @id @default(uuid()) // Ссылка
+  name                   String // Наименование
+  store                  Store[] // Массив моделей Магазин / Store
+  marketPlaceGlobalPromt String
+  company                Company? @relation(fields: [companyId], references: [id])
+  companyId              String
+}
+
+// Справочник - Магазин
+model Store {
+  id              String       @id @default(uuid()) // Ссылка
+  name            String // Наименование магазина
+  storeLocalPromt String // Локальный промт магазина
+  goods           Product[]
+  // следующие две строчки создают связь Справочника Store с MarketPlace
+  marketPlace     MarketPlace? @relation(fields: [marketPlaceId], references: [id])
+  marketPlaceId   String
+}
+
+// Справочник - Товары площадки
+model Product {
+  id                String   @id @default(uuid()) // Ссылка
+  name              String // Наименование товара
+  vendorCode        String // Арткул
+  rating            Int // Общий Рейтинг товара
+  productLocalPromt String
+  reviews           Review[]
+  // связь продукта / товара с магазином
+  store             Store?   @relation(fields: [storeId], references: [id])
+  storeId           String
+}
+
+// Справочник - Отзывы
+model Review {
+  id             String   @id @default(uuid()) // Ссылка
+  review         String // Отзыв - текст отзыва
+  rating         Int // Рейтинг (оценка товара отдельного пользователя - число)
+  advantages     String // Преимущества
+  flaws          String // Недостатки
+  reviewAuthorId String
+  // связь отзыва с товаром
+  product        Product? @relation(fields: [productId], references: [id])
+  productId      String
+}
+
+// Справочник - Вопросы
+// model Question {
+//   id        String    @id @default(uuid()) // Ссылка
+//   comments  Comment[] // Массив комментариев
+//   // связь вопроса с товаром
+//   product   Product?  @relation(fields: [productId], references: [id])
+//   productId String
+// }
+
+// Справочник - комментарии
+// model Comment {
+//   id String @id @default(uuid()) // Ссылка
+//
+//   // Связь комментария с вопросом
+//   question   Question? @relation(fields: [questionId], references: [id])
+//   questionId String
+//
+//   // Связь комментария с отзывом
+//   review   Review? @relation(fields: [reviewId], references: [id])
+//   reviewId String
+// }
