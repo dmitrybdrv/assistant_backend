@@ -11,29 +11,138 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Справочник - Организация.
+// Справочник - Организация
 model Company {
-  id          String       @id @unique @default(uuid())
-  name        String
+  id          String        @id @unique @default(uuid()) // Ссылка
+  name        String // Наименование Организации / Админ пользователя
+  inn         String // ИНН компании - Потзователя-админа
   password    String
   email       String
-  users       User[]
-  GlobalPromt GlobalPromt?
+  users       User[] // Массив пользователей (субпользователей) подчинённых Организации (администратору)
+  GlobalPromt GlobalPromt? // Общий Глобальный промт (настройки администратора системы)
+  MarketPlace MarketPlace[] // Массив маркетплейсов (OZON, WB, YM, SberMega)
 }
 
 // Справочник - Пользователь
 model User {
-  id        String  @id @default(uuid())
-  name      String // ФИО
-  email     String
+  id    String @id @default(uuid()) // Ссылка
+  name  String // ФИО
+  email String
+
+  // следующие две строчки создают связь Справочника Пользователь - User с Организацией - Company
   company   Company @relation(fields: [companyId], references: [id])
   companyId String  @unique
 }
 
-// Глобальный промт - настройки администратора системы
+// Общий Глобальный промт - настройки администратора системы
 model GlobalPromt {
-  id        String  @id @default(uuid()) // Ссылка
-  value     String
+  id    String @id @default(uuid()) // Ссылка
+  value String // Значение
+
+  // следующие две строчки создают связь Справочника Глобальный промт с Организацией - Company
   company   Company @relation(fields: [companyId], references: [id])
   companyId String  @unique
+}
+
+// Справочник - Площадка (OZON, WB, YM)
+model MarketPlace {
+  id                     String  @id @default(uuid()) // Ссылка
+  name                   String // Наименование площадки
+  marketPlaceGlobalPromt String // Глобальный промт Площадки
+  stores                 Store[] // Массив моделей Магазин / Store. Связаны с Площадкой
+
+  // следующие две строчки создают связь Справочника MarketPlace - Площадка с Организацией - Company
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId String
+}
+
+// Справочник - Магазин
+model Store {
+  id              String    @id @default(uuid()) // Ссылка
+  name            String // Наименование Магазина
+  storeLocalPromt String // Локальный промт Магазина
+  goods           Product[] // Массив Товаров Магазина
+
+  // следующие две строчки создают связь Справочника Store - Магазин с MarketPlace - Площадка
+  marketPlace   MarketPlace? @relation(fields: [marketPlaceId], references: [id])
+  marketPlaceId String
+}
+
+// Справочник - Товар
+model Product {
+  id                String     @id @default(uuid()) // Ссылка
+  name              String // Наименование товара
+  vendorCode        String // Артикул товара
+  productLocalPromt String // Локальный промт продукта
+  rating            Int // Общий Рейтинг товара
+  reviews           Review[] // Массив Отзывов
+  question          Question[] // Массив Вопросов
+
+  // следующие две строчки создают связь Справочника Товар - Product с Магазином - Store
+  store   Store? @relation(fields: [storeId], references: [id])
+  storeId String
+}
+
+// Справочник - Отзыв
+model Review {
+  id         String    @id @default(uuid()) // Ссылка
+  date       String // Дата Отзыва
+  author     Author?
+  reviewText String // Текст отзыва
+  rating     Int // Рейтинг (оценка товара отдельного пользователя - число)
+  advantages String // Преимущества
+  flaws      String // Недостатки
+  comments   Comment[] // Комментарии к Отзыву
+
+  // следующие две строчки создают связь Справочника Отзыва - Review с Товаром - Product
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String
+}
+
+// Справочник - Вопрос
+model Question {
+  id           String    @id @default(uuid()) // Ссылка
+  date         String // Дата Вопроса
+  author       Author? // Автор Вопроса
+  questionText String // Текст Вопроса
+  comments     Comment[] // Комментарии к Воросу
+
+  // следующие две строчки создают связь Справочника Вопрос - Question с Товаром - Product
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String
+}
+
+// Справочник - Комментарий
+model Comment {
+  id          String  @id @default(uuid()) // Ссылка
+  date        String // Дата Комментария
+  contentText String // Текст комментария
+  authors     Author? // Автор комментария
+
+  // Связь комментария с вопросом
+  question   Question? @relation(fields: [questionId], references: [id])
+  questionId String
+
+  // Связь комментария с отзывом
+  review   Review? @relation(fields: [reviewId], references: [id])
+  reviewId String
+}
+
+// Справочник - Автор (вопроса, комментария, отзыва)
+model Author {
+  id   String @id @default(uuid()) // Ссылка
+  name String // Имя автора
+  type String // Типизация Author по строковому значению
+
+  // Связь Автора с Комментарием
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId String   @unique
+
+  // Связь Автора с Отзывом
+  review   Review? @relation(fields: [reviewId], references: [id])
+  reviewId String  @unique
+
+  // Связь Автора с Вопросом
+  question   Question? @relation(fields: [questionId], references: [id])
+  questionId String    @unique
 }
