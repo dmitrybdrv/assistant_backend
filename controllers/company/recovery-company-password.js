@@ -12,7 +12,7 @@ const LOGIN_FOR_SMTP = process.env.LOGIN_FOR_SMTP
 
 /**
  * Восстановление пароля => сброс ссылки на почту
- * @route POST /api/user/recovery-password
+ * @route POST /api/company/recovery-password
  * @Access Public
  */
 const recovery = async (req, res) => {
@@ -22,14 +22,14 @@ const recovery = async (req, res) => {
         const {email} = req.body
 
         //поиск уже существующего в базе пользователя
-        const foundedUser = await prisma.prisma.user.findFirst({
+        const foundedCompany = await prisma.prisma.company.findFirst({
             where: {
                 email,
             }
         })
 
         //если пользователя с введённым email не найден в базе
-        if (!foundedUser) {
+        if (!foundedCompany) {
             return res.status(400).json({
                 message: 'Пользователь с таким email не найден!'
             })
@@ -37,7 +37,7 @@ const recovery = async (req, res) => {
 
         //создание jwt токена (закодированного id)
         const secret = process.env.JWT_SECRET
-        const token = jwt.sign({id: foundedUser.id}, secret, {expiresIn: '1d'})
+        const token = jwt.sign({id: foundedCompany.id}, secret, {expiresIn: '1d'})
 
         //импорт письма - шаблона для перехода по ссылке на сброс пароля (создание нового пароля)
         const filePath = path.join(__dirname, '../..', '/common/template.html')
@@ -48,7 +48,7 @@ const recovery = async (req, res) => {
         const template = handlebars.compile(fileContent)
 
         // Генерация HTML-кода на основе шаблона и данных
-        const html = template({RESET_PASSWORD, foundedUser, token});
+        const html = template({RESET_PASSWORD, foundedCompany, token});
 
         //создание и настройка транспорта
         const transporter = nodemailer.createTransport({
@@ -70,7 +70,7 @@ const recovery = async (req, res) => {
             html,
         }
 
-        //ответ на запрос /api/user/recovery
+        //ответ на запрос /api/company/recovery
         await transporter.sendMail(mailOptions)
 
         res.status(200).send({message: `Инструкции отправлены на почту ${email}`})

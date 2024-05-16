@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 
 /**
  *
- * @route POST /api/user/login
+ * @route POST /api/company/login
  * @desc Логинизация
  * @access Public
  */
@@ -25,7 +25,7 @@ const login = async (req, res) => {
         }
 
         //поиск пользователя в базе.
-        const user = await prisma.prisma.user.findFirst({
+        const company = await prisma.prisma.company.findFirst({
             where: {
                 email,
             },
@@ -33,7 +33,7 @@ const login = async (req, res) => {
 
         //Сравнение пароля - если пользователь нашёлся в базе и введённый пароль соответствует паролю в базе (сравнение
         // введённого пользователем пароля с хэшированным паролем, хранящимся в базе данных)
-        const isPasswordCorrect = user && (await bcrypt.compare(password, user.password));
+        const isPasswordCorrect = company && (await bcrypt.compare(password, company.password));
 
         //создание jwt токена
         const secret = process.env.JWT_SECRET
@@ -42,15 +42,14 @@ const login = async (req, res) => {
         const notExpiresToken = rememberMe ? '3d' : '1h'
 
         //условие - на соответствие логина и пароля (+наличие secret записи в .env) найденного в базе пользователя, введённым данным для авторизации
-        if (isPasswordCorrect && user && secret) {
+        if (isPasswordCorrect && company && secret) {
 
             //при соответствии - положительный ответ (объект с данными)
             return res.status(200).json({
-                message: `Добро пожаловать ${user.name}!`,
-                token: jwt.sign({id: user.id}, secret, {expiresIn: notExpiresToken}),
-                // name: user.name,
-                // email: user.email,
-                // createdBots: user.createdReviewerBot
+                message: `Добро пожаловать ${company.name}!`,
+                token: jwt.sign({id: company.id}, secret, {expiresIn: notExpiresToken}),
+                // name: company.name,
+                // email: company.email,
             })
         } else {
             return res.status(400).json({message: 'Не верно введён логин или пароль'})

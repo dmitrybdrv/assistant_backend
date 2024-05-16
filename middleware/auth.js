@@ -14,14 +14,14 @@ const auth = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
         //поиск пользователя в базе по id
-         const user = await prisma.user.findUnique({
+         const company = await prisma.company.findUnique({
             where: {
                 id: decoded.id
             }
         })
 
         //если пользователь найден передаём его дальше
-        req.user = user
+        req.company = company
 
         next()
 

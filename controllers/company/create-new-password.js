@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 
 /**
  * Создание нового пароля
- * @route POST /api/user/create-new-password
+ * @route POST /api/company/create-new-password
  * @Access Private
  */
 const createNewPassword = async (req, res) => {
@@ -12,7 +12,7 @@ const createNewPassword = async (req, res) => {
     try {
 
         const {password} = req.body
-        const user = req.user
+        const company = req.company
 
         //условие - на отсутствие введёного password для создания нокого
         if (!password) {
@@ -28,8 +28,8 @@ const createNewPassword = async (req, res) => {
         const hashedNewPassword = await bcrypt.hash(password, salt)
 
         //Замена пароля у найденного пользователя
-        await prisma.prisma.user.update({
-            where: { id: user.id },
+        await prisma.prisma.company.update({
+            where: { id: company.id },
             data: { password: hashedNewPassword }
         });
 

@@ -1,6 +1,6 @@
 /**
  *
- * @route POST /api/user/logout
+ * @route POST /api/company/logout
  * @desc Вылогиневание
  * @access Private
  */

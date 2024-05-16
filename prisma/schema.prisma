@@ -16,9 +16,9 @@ model Company {
   id          String        @id @unique @default(uuid()) // Ссылка
   name        String // Наименование Организации / Админ пользователя
   inn         String // ИНН компании - Потзователя-админа
-  password    String
+  password    String // Пароль
   email       String
-  users       User[] // Массив пользователей (субпользователей) подчинённых Организации (администратору)
+  Users       User[] // Массив пользователей (субпользователей) подчинённых Организации (администратору)
   GlobalPromt GlobalPromt? // Общий Глобальный промт (настройки администратора системы)
   MarketPlace MarketPlace[] // Массив маркетплейсов (OZON, WB, YM, SberMega)
 }
@@ -31,7 +31,7 @@ model User {
 
   // следующие две строчки создают связь Справочника Пользователь - User с Организацией - Company
   company   Company @relation(fields: [companyId], references: [id])
-  companyId String  @unique
+  companyId String
 }
 
 // Общий Глобальный промт - настройки администратора системы
