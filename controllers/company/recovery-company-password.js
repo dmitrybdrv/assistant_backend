@@ -76,9 +76,7 @@ const recovery = async (req, res) => {
         res.status(200).send({message: `Инструкции отправлены на почту ${email}`})
 
     } catch (e) {
-
         res.status(400).json({message: 'Что-то пошло не так на бэке'})
-        console.log(e)
     }
 }
 
