@@ -8,8 +8,12 @@ const prisma = require('../../prisma/prisma-client')
 const getAllUsers = async (req, res) => {
 
     try {
-        // Массив пользователей (либо пустой, либо с пользователями)
-        const users = await prisma.prisma.user.findMany()
+        // Массив пользователей (либо пустой, либо с пользователями, которые принадлежат конкретной компании)
+        const users = await prisma.prisma.user.findMany({
+            where: {
+                companyId: req.company.id
+            }
+        })
 
         res.status(200).json(users)
 

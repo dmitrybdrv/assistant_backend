@@ -26,11 +26,6 @@ const createUser = async (req, res) => {
             return res.status(400).json({message: 'Пользователь с таким email уже существует'})
         }
 
-        // Не добавлять если уже есть такой пользователь
-        if(alreadyCreatedUser) {
-            return res.status(400).json({message: 'Пользователь с таким email уже существ'})
-        }
-
        const newUser = await prisma.prisma.user.create({
             data: {
                 ...data,

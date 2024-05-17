@@ -20,6 +20,11 @@ const auth = async (req, res, next) => {
             }
         })
 
+        // TODO добавить проверку -Если указанный company не существует (крашется апп. уточнить у gpt)
+        // if (!company) {
+        //     res.status(401).json({message: 'Не авторизован'})
+        // }
+
         //если пользователь найден передаём его дальше
         req.company = company
 
