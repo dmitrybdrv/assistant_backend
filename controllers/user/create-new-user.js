@@ -26,7 +26,7 @@ const createUser = async (req, res) => {
             return res.status(400).json({message: 'Пользователь с таким email уже существует'})
         }
 
-       const newUser = await prisma.prisma.user.create({
+       await prisma.prisma.user.create({
             data: {
                 ...data,
                 companyId: req.company.id
@@ -34,7 +34,7 @@ const createUser = async (req, res) => {
         })
 
 
-        return res.status(200).json({newUser, message: 'Пользователь - сотрудник создан!'})
+        return res.status(200).json({message: 'Пользователь - сотрудник создан!'})
 
     } catch (e) {
         res.status(500).json({

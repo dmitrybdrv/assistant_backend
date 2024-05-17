@@ -1,18 +1,20 @@
 const prisma = require('../../prisma/prisma-client')
 
 /**
- * @route PUT /api/bot/edit
+ * @route PUT /api/users/edit
  * @desc Редактирование бота
  * @Access Private
  */
-const editBot = async (req, res) => {
+const editUser = async (req, res) => {
 
     try {
         const data = req.body
 
-        const bot = await prisma.prisma.reviewerBot.update({
+        const bot = await prisma.prisma.user.update({
             where: {
                 id: data.id,
+                // админ может редактировать только своего пользователя по id
+                companyId: req.company.id
             },
             data: {
                 ...data,
@@ -29,4 +31,4 @@ const editBot = async (req, res) => {
 
 }
 
-module.exports = {editBot}
+module.exports = {editUser}

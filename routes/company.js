@@ -7,6 +7,7 @@ const {current} = require("../controllers/company/current")
 const {recovery} = require("../controllers/company/recovery-company-password")
 const {createNewPassword} = require("../controllers/company/create-new-password")
 const {logout} = require("../controllers/company/logout")
+const {deleteCompany} = require("../controllers/company/delete-company")
 
 /* /api/company/register */
 router.post('/register', register);
@@ -25,5 +26,8 @@ router.post('/create-new-password', auth, createNewPassword)
 
 /* /api/company/logout */
 router.post('/logout', logout)
+
+/* /api/company/remove */
+router.delete('/remove/:id', auth, deleteCompany)
 
 module.exports = router;

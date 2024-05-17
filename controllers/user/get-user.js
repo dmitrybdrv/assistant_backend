@@ -19,7 +19,9 @@ const getUserById = async (req, res) => {
 
         const user = await prisma.prisma.user.findFirst({
             where: {
-                id
+                id,
+                // админ может получать только своих пользователей
+                companyId: req.company.id
             }
         })
 
