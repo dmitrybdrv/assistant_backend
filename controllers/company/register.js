@@ -13,25 +13,37 @@ const register = async (req, res) => {
         const {email, password, name, inn} = req.body
 
         //условие - на отсутствие введёного email или password при регистрации
-        if (!email || !password || !name) {
+        if (!email || !password || !name || !inn) {
             return res.status(400).json({message: 'Пожалуйста, заполните обязательные поля'});
         }
 
-        //условие - поверка валидности пароля (длина)
+        // Условие - поверка валидности пароля (длина)
         if (password.length <= 5 || password.length > 30) {
             return res.status(400).json({message: 'Пароль должен состоять от 6 до 30 символов'});
         }
 
-        //поиск уже существующего в базе пользователя
-        const alreadyRegisteredCompany = await prisma.prisma.company.findFirst({
-            where: {
-                email,
+        // Поиск уже существующего в базе пользователя по Email
+        if(email) {
+            const allReadyEmail = await prisma.prisma.company.findFirst({
+                where: {
+                    email,
+                }
+            })
+            if(allReadyEmail) {
+                return res.status(400).json({message: 'Пользователь с таким email или ИНН уже существует'})
             }
-        })
+        }
 
-        //условие - если уже существует в базе
-        if (alreadyRegisteredCompany) {
-            return res.status(400).json({message: 'Пользователь с таким email уже существует'})
+        // Поиск уже существующего в базе пользователя по ИНН
+        if(inn) {
+            const allReadyInn = await prisma.prisma.company.findFirst({
+                where: {
+                    inn,
+                }
+            })
+            if(allReadyInn) {
+                return res.status(400).json({message: 'Пользователь с таким email или ИНН уже существует'})
+            }
         }
 
         //зашифровывание пароля (для последующей записи в базу зашифрованного пароля)
@@ -45,17 +57,23 @@ const register = async (req, res) => {
                 email,
                 inn,
                 password: hashedPassword,
+                GlobalPromt: {
+                    create: {
+                        value: ""
+                    }
+                }
             }
         })
 
         //создание jwt токена
        const secret = process.env.JWT_SECRET
 
-        //условие - если пользователь создан и secret в наличии, возвращается объект с id, email, token
+        // Если пользователь создан и secret в наличии, возвращается объект с id, email, token
         if (newCompany && secret) {
             res.status(201).json({
                 message: 'Вы зарегистрированы, теперь можете войти в аккаунт'
                 })
+
         } else {
             return res.status(400).json({
                 message: 'Не удалось зарегистрироваться!'

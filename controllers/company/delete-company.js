@@ -2,7 +2,7 @@ const prisma = require('../../prisma/prisma-client')
 
 
 /**
- * @route POST /api/company/remove
+ * @route Delete /api/company/remove
  * @desc Удаление Company - аккаунт администратора
  * @Access Private
  */
@@ -20,6 +20,8 @@ const deleteCompany = async (req, res) => {
         if (!deletedCompany) {
             res.status(400).json({message: 'Аккаунт не найден'});
         }
+
+        //TODO добавить проверку на наличие токена (один раз получилось удалить без токена только по ИД)
 
         // Удаление всех пользователей в аккаунте
         await prisma.prisma.user.deleteMany()

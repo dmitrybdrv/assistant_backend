@@ -5,7 +5,7 @@ const {createNewGlobalPromt} = require("../controllers/promt/create-global-promt
 const {getGlobalPromt} = require("../controllers/promt/get-global-promt")
 
 /* /api/promt/create-new-promt */
-router.post('/create-new-promt',auth, createNewGlobalPromt);
+router.put('/create-new-promt',auth, createNewGlobalPromt);
 
 /* /api/promt/get-globalpromt */
 router.get('/get-globalpromt',auth, getGlobalPromt);

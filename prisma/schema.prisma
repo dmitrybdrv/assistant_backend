@@ -15,7 +15,7 @@ datasource db {
 model Company {
   id          String        @id @unique @default(uuid()) // Ссылка
   name        String // Наименование Организации / Админ пользователя
-  inn         String // ИНН компании - Потзователя-админа
+  inn         String // ИНН компании - Пользователя-админа
   password    String // Пароль
   email       String
   Users       User[] // Массив пользователей (субпользователей) подчинённых Организации (администратору)
