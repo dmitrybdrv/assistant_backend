@@ -2,7 +2,7 @@ const prisma = require('../../prisma/prisma-client')
 
 
 /**
- * @route PUT /api/company/edit
+ * @route PATCH /api/company/edit
  * @desc Изменение Company - аккаунт администратора
  * @Access Private
  */
@@ -14,7 +14,7 @@ const editCompany = async (req, res) => {
 
         const company = await prisma.prisma.company.update({
             where: {
-                id: data.id,
+              id: req.company.id
             },
             data: {
                 ...data,

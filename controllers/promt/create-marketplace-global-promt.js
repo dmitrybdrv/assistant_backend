@@ -1,12 +1,12 @@
 const prisma = require('../../prisma/prisma-client')
 
 /**
- * Создание нового GlobalPromt
- * @route PUT /api/promt/create-global-promt
+ * Создание нового MarketplaceGlobalPromt
+ * @route POST /api/promt/create-marketplace-global-promt
  * @Access Private
  */
 
-const createGlobalPromt = async (req, res) => {
+const createMarketplaceGlobalPromt = async (req, res) => {
 
     try {
 
@@ -22,17 +22,17 @@ const createGlobalPromt = async (req, res) => {
         //     res.status(400).json({message: 'Длина промта не должна превышать 1000 символов'})
         // }
 
-        // Изменение Глобального промта администратора - Company (первоначальное создание происходит в момент создания Company - админа)
-        const newPromt = await prisma.prisma.globalPromt.update({
+        // Создание Глобального промта Маркетплейса (первоначальное создание)
+        const newPromt = await prisma.prisma.marketPlace.create({
             where: {
-                companyId: req.company.id // req.company.id - админский id (расшифрованный)
+              id: req.company.id
             },
             data: {
-                value,
+                marketPlaceGlobalPromt: value
             }
         })
 
-        res.status(200).json({newPromt, message: 'Промт готов!'})
+        res.status(200).json({newPromt, message: 'Промт Маркетплейса готов!'})
 
     } catch (e) {
         console.log(e)
@@ -41,4 +41,4 @@ const createGlobalPromt = async (req, res) => {
 
 }
 
-module.exports = {createNewGlobalPromt: createGlobalPromt}
+module.exports = {createMarketplaceGlobalPromt}

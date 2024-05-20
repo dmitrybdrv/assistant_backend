@@ -1,4 +1,5 @@
 const prisma = require('../../prisma/prisma-client')
+const bcrypt = require('bcrypt')
 
 /**
  * @route POST /api/users/add
@@ -10,8 +11,8 @@ const createUser = async (req, res) => {
     try {
         const data = req.body
 
-        if (!data.name || !data.email) {
-            return res.status(400).json({message: 'Заполните все поля'})
+        if (!data.name || !data.email || !data.password) {
+            return res.status(400).json({message: 'Заполните все обязательные поля'})
         }
 
         // Поиск создаваемого пользователя - сотрудника в базе.
@@ -26,15 +27,20 @@ const createUser = async (req, res) => {
             return res.status(400).json({message: 'Пользователь с таким email уже существует'})
         }
 
-       await prisma.prisma.user.create({
+        //зашифровывание пароля (для последующей записи в базу зашифрованного пароля для субпользователя / User)
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(data.password, salt)
+
+       const newUser = await prisma.prisma.user.create({
             data: {
                 ...data,
+                password: hashedPassword, // При первоначальном создании пользователя криптуется и присваевается дефолтный пароль (Pr0FF3s10N@l)
                 companyId: req.company.id
             }
         })
 
 
-        return res.status(200).json({message: 'Пользователь - сотрудник создан!'})
+        return res.status(200).json({newUser, message: 'Пользователь - сотрудник создан!'})
 
     } catch (e) {
         res.status(500).json({

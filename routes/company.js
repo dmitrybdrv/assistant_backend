@@ -28,11 +28,10 @@ router.post('/create-new-password', auth, createNewPassword)
 /* /api/company/logout */
 router.post('/logout', logout)
 
-/* /api/company/remove/:di */
-router.delete('/remove/:id', auth, deleteCompany)
-
 /* /api/company/remove */
-// TODO изменить на patch?
-router.put('/edit/:id', auth, editCompany)
+router.delete('/remove', auth, deleteCompany)
+
+/* /api/company/edit */
+router.patch('/edit', auth, editCompany)
 
 module.exports = router;

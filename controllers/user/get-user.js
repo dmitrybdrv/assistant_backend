@@ -8,18 +8,13 @@ const prisma = require('../../prisma/prisma-client')
  */
 const getUserById = async (req, res) => {
 
-    const {id} = req.body
-
     try {
 
-        // Если ID не указан вообще
-        if (!id) {
-            return res.status(400).json({message: 'Требуется ID пользователя'});
-        }
+        const {userId} = req.body // id искомого пользователя
 
         const user = await prisma.prisma.user.findFirst({
             where: {
-                id,
+                id: userId,
                 // админ может получать только своих пользователей
                 companyId: req.company.id
             }

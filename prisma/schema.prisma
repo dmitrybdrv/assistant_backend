@@ -25,9 +25,10 @@ model Company {
 
 // Справочник - Пользователь
 model User {
-  id    String @id @default(uuid()) // Ссылка
-  name  String // ФИО
-  email String
+  id       String @id @default(uuid()) // Ссылка
+  name     String // ФИО
+  email    String
+  password String
 
   // следующие две строчки создают связь Справочника Пользователь - User с Организацией - Company
   company   Company @relation(fields: [companyId], references: [id])

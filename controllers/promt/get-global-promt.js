@@ -8,10 +8,11 @@ const prisma = require('../../prisma/prisma-client')
 const getGlobalPromt = async (req, res) => {
 
     try {
+        const {adminId} = req.body
         // Объект GlobalPromt (либо пустой объект который принадлежит конкретной компании - админу)
         const promt = await prisma.prisma.globalPromt.findUnique({
             where: {
-                companyId: req.company.id
+                companyId: adminId
             },
         })
 
