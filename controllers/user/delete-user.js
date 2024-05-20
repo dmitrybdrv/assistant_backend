@@ -3,7 +3,7 @@ const prisma = require('../../prisma/prisma-client')
 
 
 /**
- * @route POST /api/users/remove
+ * @route DELETE /api/users/remove/:id
  * @desc Удаление пользователя (субпользователя)
  * @Access Private
  */

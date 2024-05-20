@@ -7,23 +7,23 @@ const {createUser} = require('../controllers/user/create-new-user')
 const {deleteUser} = require('../controllers/user/delete-user')
 const {editUser} = require('../controllers/user/edit-user')
 
-// /api/users
+/* /api/users/all */
 // Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция getAllUsers
 router.get('/all', auth, getAllUsers)
 
-// /api/users/find/:id
+/* /api/users/find/:id */
 // Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция getUserById
 router.get('/find/:id', auth, getUserById)
 
-// /api/users/add
+/* /api/users/add */
 // Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция createUser
 router.post('/add', auth, createUser)
 
-// /api/users/remove/:id
-// Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция deleteBot
+/* /api/users/remove/:id */
+// Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция deleteUser
 router.delete('/remove/:id', auth, deleteUser)
 
-// /api/users/edit/:id
+/* /api/users/edit/:id */
 // Роут защищён функцией auth. После проверки аутентификации (auth), выполняется функция editUser
 router.put('/edit/:id', auth, editUser)
 

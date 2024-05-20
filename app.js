@@ -33,5 +33,6 @@ app.use(cookieParser());
 app.use('/api/company', require('./routes/company'))
 app.use('/api/users', require('./routes/user'))
 app.use('/api/promt', require('./routes/promts'))
+app.use('/api/marketplaces', require('./routes/marketPlaces'))
 
 module.exports = app;
