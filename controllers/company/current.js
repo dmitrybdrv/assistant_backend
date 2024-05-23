@@ -12,12 +12,13 @@ const current = async (req, res) => {
         const company = {
             name: req.company.name,
             email: req.company.email,
+            inn: req.company.inn,
         }
 
         res.status(200).json(company)
 
     } catch (e) {
-        res.status(400).json({message: 'Что-то пошло не так на бэке'})
+        return res.status(400).json({message: 'Что-то пошло не так на бэке'})
     }
 
 }

@@ -48,15 +48,13 @@ const login = async (req, res) => {
             return res.status(200).json({
                 message: `Добро пожаловать ${company.name}!`,
                 token: jwt.sign({id: company.id}, secret, {expiresIn: notExpiresToken}),
-                // name: company.name,
-                // email: company.email,
             })
         } else {
             return res.status(400).json({message: 'Не верно введён логин или пароль'})
         }
 
     } catch (e) {
-        res.status(400).json({message: 'Что-то пошло не так на бэке!'})
+       return res.status(400).json({message: 'Что-то пошло не так на бэке!'})
     }
 
 }

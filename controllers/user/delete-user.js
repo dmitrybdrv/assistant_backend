@@ -30,12 +30,12 @@ const deleteUser = async (req, res) => {
             },
         });
 
-        if (userForDelete) {
-            res.status(200).json({message: 'Пользователь удалён!'});
-        }
+
+        res.status(200).json({message: 'Пользователь удалён!'});
+
 
     } catch (e) {
-        res.status(500).json({message: 'Не удалось удалить Пользователя'});
+       return res.status(500).json({message: 'Не удалось удалить Пользователя'});
     }
 }
 

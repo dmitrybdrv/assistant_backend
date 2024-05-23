@@ -40,12 +40,10 @@ const createUser = async (req, res) => {
         })
 
 
-        return res.status(200).json({newUser, message: 'Пользователь - сотрудник создан!'})
+        res.status(200).json({newUser, message: 'Пользователь - сотрудник создан!'})
 
     } catch (e) {
-        res.status(500).json({
-            message: 'Не удалось создать пользователя - сотрудника'
-        })
+       return res.status(500).json({message: 'Не удалось создать пользователя - сотрудника'})
     }
 
 }

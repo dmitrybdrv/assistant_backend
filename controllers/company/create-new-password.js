@@ -14,13 +14,13 @@ const createNewPassword = async (req, res) => {
         const {password} = req.body
         const company = req.company
 
-        //условие - на отсутствие введёного password для создания нокого
+        //Условие - на отсутствие введёного password для создания нокого
         if (!password) {
-            res.status(400).json({message: 'Введите новый пароль'})
+            return res.status(400).json({message: 'Введите новый пароль'})
         }
-        //условие - на отсутствие введёного password для создания нокого
+        //Условие - на отсутствие введёного password для создания нокого
         if (password.length <= 5 || password.length > 30) {
-            res.status(400).json({message: 'Длина пароля от 6 до 30 имволов'})
+            return res.status(400).json({message: 'Длина пароля от 6 до 30 имволов'})
         }
 
         //зашифровывание нового пароля (для последующей перезаписи в базу зашифрованного пароля)
@@ -36,7 +36,7 @@ const createNewPassword = async (req, res) => {
         res.status(200).json({message: 'Пароль успешно изменён'})
 
     } catch (e) {
-        res.status(400).json({message: 'Что-то пошло не так на бэке'})
+        return res.status(400).json({message: 'Что-то пошло не так на бэке'})
     }
 
 }

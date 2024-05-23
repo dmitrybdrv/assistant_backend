@@ -9,7 +9,7 @@ const prisma = require('../../prisma/prisma-client')
 const deleteCompany = async (req, res) => {
     try {
 
-        const companyForDelete = await prisma.prisma.company.findUnique({
+        const companyForDelete = await prisma.prisma.company.findFirst({
             where: {
                 id: req.company.id
             }
@@ -17,7 +17,7 @@ const deleteCompany = async (req, res) => {
 
         // Если на удаление отправлено несколько запросов, но удаление уже прошло и пользователя нет в базе
         if (!companyForDelete) {
-            res.status(400).json({message: 'Аккаунт не найден'});
+            return res.status(400).json({message: 'Аккаунт не найден'});
         }
 
         //TODO добавить проверку на наличие токена (один раз получилось удалить без токена только по ИД)
@@ -35,7 +35,7 @@ const deleteCompany = async (req, res) => {
         }
 
     } catch (e) {
-        res.status(500).json({message: 'Не удалось удалить аккаунт'});
+        return res.status(500).json({message: 'Что-то не так на бэке'});
     }
 }
 

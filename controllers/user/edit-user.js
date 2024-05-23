@@ -21,12 +21,10 @@ const editUser = async (req, res) => {
             }
         })
 
-        return res.status(200).json({user, message: 'Отредактировано!'})
+        res.status(200).json({user, message: 'Отредактировано!'})
 
     } catch (e) {
-        res.status(500).json({
-            message: 'Не удалось изменить'
-        })
+       return res.status(500).json({message: 'Что-то не так на бэке'})
     }
 
 }

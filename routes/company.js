@@ -4,7 +4,7 @@ const {auth} = require('../middleware/auth')
 const {login} = require("../controllers/company/login")
 const {register} = require("../controllers/company/register")
 const {current} = require("../controllers/company/current")
-const {recovery} = require("../controllers/company/recovery-company-password")
+const {recovery} = require("../controllers/company/company-recovery-password")
 const {createNewPassword} = require("../controllers/company/create-new-password")
 const {logout} = require("../controllers/company/logout")
 const {deleteCompany} = require("../controllers/company/delete-company")
@@ -26,7 +26,7 @@ router.post('/recovery-password', recovery)
 router.post('/create-new-password', auth, createNewPassword)
 
 /* /api/company/logout */
-router.post('/logout', logout)
+router.post('/logout', auth, logout)
 
 /* /api/company/remove */
 router.delete('/remove', auth, deleteCompany)

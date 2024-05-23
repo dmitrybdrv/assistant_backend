@@ -33,9 +33,7 @@ const getMarketplaceById = async (req, res) => {
         res.status(200).json(marketplace)
 
     } catch (e) {
-        res.status(400).json({
-            message: 'Не удалось найти маркетплейс'
-        })
+        return res.status(400).json({ message: 'Что-то не так на бэке'})
     }
 
 }

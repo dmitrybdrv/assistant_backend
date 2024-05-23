@@ -81,7 +81,7 @@ const register = async (req, res) => {
         }
 
     } catch (e) {
-        res.status(400).json({message: 'Что-то пошло не так на бэке'})
+        return res.status(400).json({message: 'Что-то пошло не так на бэке'})
     }
 
 }

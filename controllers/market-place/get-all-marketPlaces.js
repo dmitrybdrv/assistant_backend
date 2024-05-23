@@ -19,7 +19,7 @@ const getAllMarketPlaces = async (req, res) => {
 
     } catch (e) {
         res.status(400).json({
-            message: 'Не удалось получить маркетплейсы'
+            message: 'Что-то не так на бэке'
         })
     }
 

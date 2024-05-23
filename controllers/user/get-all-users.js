@@ -15,12 +15,14 @@ const getAllUsers = async (req, res) => {
             }
         })
 
+        if(!users) {
+            return res.status(400).json({message: 'Не удалось получить сотрудников'})
+        }
+
         res.status(200).json(users)
 
     } catch (e) {
-        res.status(400).json({
-            message: 'Не удалось получить сотруников'
-        })
+        return res.status(400).json({message: 'Что-то не так на бэке'})
     }
 
 }

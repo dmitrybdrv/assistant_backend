@@ -20,10 +20,14 @@ const auth = async (req, res, next) => {
             }
         })
 
+        if(!req.company) {
+            return res.status(400).json({message: 'Не авторизован'})
+        }
+
         next()
 
     } catch (error) {
-        res.status(400).json({message: 'Не авторизован'})
+        return res.status(400).json({message: 'Не авторизован'})
     }
 }
 

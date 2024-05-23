@@ -17,7 +17,7 @@ const deleteMarketplace = async (req, res) => {
 
         // Если ни одного маркетплеса по заданному Id не удалось найти (вернулся null)
         if (!marketplace) {
-            return res.status(400).json({message: 'Маркетплейс не найден'});
+            return res.status(400).json({message: 'Не удалось удалить Маркетплейс'});
         }
 
         await prisma.prisma.marketPlace.delete({
@@ -33,7 +33,7 @@ const deleteMarketplace = async (req, res) => {
         }
 
     } catch (e) {
-        res.status(500).json({message: 'Не удалось удалить Маркетплейс'});
+        return res.status(500).json({message: 'Что-то не так на бэке'});
     }
 }
 

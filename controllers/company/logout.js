@@ -14,8 +14,9 @@ const logout = async (req, res) => {
         delete req.headers['Authorization']
 
         res.status(200).json({message: 'До скорого!'})
+
     } catch (e) {
-        res.status(400).json({message: 'Что-то пошло не так на бэке'})
+        return res.status(400).json({message: 'Что-то пошло не так на бэке'})
     }
 }
 

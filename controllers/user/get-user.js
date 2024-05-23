@@ -21,15 +21,15 @@ const getUserById = async (req, res) => {
         })
 
         // TODO добавить проверку -Если указанный ID не существует (крашется апп. уточнить у gpt)
-        // if (user === null) {
-        //     res.status(400).json({message: 'Указанный сотрудник не найден'})
-        // }
+        if (!user) {
+           return res.status(400).json({message: 'Указанный сотрудник не найден'})
+        }
 
         res.status(200).json(user)
 
     } catch (e) {
-        res.status(400).json({
-            message: 'Не удалось найти пользователя - сотрудника'
+       return res.status(400).json({
+            message: 'Что-то не так на бэке'
         })
     }
 

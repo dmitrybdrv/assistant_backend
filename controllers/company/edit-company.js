@@ -12,7 +12,7 @@ const editCompany = async (req, res) => {
     try {
         const data = req.body
 
-        const company = await prisma.prisma.company.update({
+        const companyUpdated = await prisma.prisma.company.update({
             where: {
               id: req.company.id
             },
@@ -21,12 +21,16 @@ const editCompany = async (req, res) => {
             }
         })
 
-        return res.status(200).json({company, message: 'Отредактировано!'})
+        const company = {
+            name: companyUpdated.name,
+            email: companyUpdated.email,
+            inn: companyUpdated.inn
+        }
+
+        res.status(200).json({company, message: 'Отредактировано!'})
 
     } catch (e) {
-        res.status(500).json({
-            message: 'Не удалось изменить'
-        })
+        return res.status(500).json({message: 'Не удалось изменить'})
     }
 
 }
