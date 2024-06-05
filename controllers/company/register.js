@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
  * @desc Регистрация
  * @access Public
  */
+//TODO Вынести общую функцию по проверки валидности и прочего (для регистрации, редактирования и в других местах где есть)
 const register = async (req, res) => {
     try {
 
@@ -17,33 +18,44 @@ const register = async (req, res) => {
             return res.status(400).json({message: 'Пожалуйста, заполните обязательные поля'});
         }
 
+        // Условие на соответствие почтового адреса
+        if(!email.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/)) {
+            return res.status(400).json({message: 'Адрес эл.почты не соответсвует требованиям'})
+        }
+
         // Условие - поверка валидности пароля (длина)
         if (password.length <= 5 || password.length > 30) {
             return res.status(400).json({message: 'Пароль должен состоять от 6 до 30 символов'});
         }
 
-        // Поиск уже существующего в базе пользователя по Email
-        if(email) {
-            const allReadyEmail = await prisma.prisma.company.findFirst({
-                where: {
-                    email,
-                }
-            })
-            if(allReadyEmail) {
-                return res.status(400).json({message: 'Пользователь с таким email или ИНН уже существует'})
-            }
+        //Условие - на соответствие пароля правилу
+        if (!password.match(/^[a-zA-Z0-9]+$/)) {
+            return res.status(400).json({message: 'Только латинские буквы (верхнего и нижнего регистра), цифр и символов'});
         }
 
-        // Поиск уже существующего в базе пользователя по ИНН
-        if(inn) {
-            const allReadyInn = await prisma.prisma.company.findFirst({
-                where: {
-                    inn,
-                }
-            })
-            if(allReadyInn) {
-                return res.status(400).json({message: 'Пользователь с таким email или ИНН уже существует'})
+        // Условие на длину имени
+        if(name.length < 1 || name.length > 45) {
+            return res.status(400).json({message: 'Длина имени от 1 до 45 символов'})
+        }
+
+        // Условие на соответствие почтового адреса
+        if(inn.length > 12 || inn.length < 12) {
+            return res.status(400).json({message: 'ИНН не соответсвует требованиям'})
+        }
+
+        //Поиск аналогичных пользователей (уже существующих в базе с данными ИНН или Почтой - либо то, либо то)
+        const alreadyRegistered = await prisma.prisma.company.findFirst({
+            where: {
+                OR: [
+                    { inn },
+                    { email }
+                ]
             }
+        })
+
+        // Условие на уже зарегистрированного пользователя с такими данными (email или inn)
+        if(alreadyRegistered) {
+            return res.status(400).json({message: 'Пользователь с идентичными данными уже существует'})
         }
 
         //зашифровывание пароля (для последующей записи в базу зашифрованного пароля)
