@@ -22,6 +22,11 @@ const editCompany = async (req, res) => {
             return res.status(400).json({message: 'Адрес эл.почты не соответсвует требованиям'})
         }
 
+        // Условие на длину почты
+        if(data.email !== undefined && (data.email.length > 45)) {
+            return res.status(400).json({message: 'Длина почтового адреса до 45 символов'})
+        }
+
         // Условие на соответствие почтового адреса
         if(data.inn !==undefined && (data.inn.length > 12 || data.inn.length < 12)) {
             return res.status(400).json({message: 'ИНН не соответсвует требованиям'})

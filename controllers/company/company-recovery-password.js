@@ -21,6 +21,11 @@ const recovery = async (req, res) => {
 
         const {email} = req.body
 
+        // Условие на соответствие почтового адреса
+        if(!email.match(/[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+/)) {
+            return res.status(400).json({message: 'Адрес эл.почты не соответсвует требованиям'})
+        }
+
         //поиск уже существующего в базе пользователя
         const foundedCompany = await prisma.prisma.company.findFirst({
             where: {
