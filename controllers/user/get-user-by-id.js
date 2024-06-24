@@ -20,17 +20,23 @@ const getUserById = async (req, res) => {
             }
         })
 
-        // TODO добавить проверку -Если указанный ID не существует (крашется апп. уточнить у gpt)
+
         if (!user) {
-           return res.status(400).json({message: 'Указанный сотрудник не найден'})
+           return res.status(400).json({message: 'Cотрудник не найден'})
         }
 
-        res.status(200).json(user)
+        const userForResponse = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            companyId: user.companyId
+        }
+
+        res.status(200).json(userForResponse)
 
     } catch (e) {
-       return res.status(400).json({
-            message: 'Что-то не так на бэке'
-        })
+        console.error('Ошибка при получении сотрудника:', e) // Логирование ошибки для отладки
+       return res.status(400).json({message: 'Что-то пошло не так'})
     }
 
 }

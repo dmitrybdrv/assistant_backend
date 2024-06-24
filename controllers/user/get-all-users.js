@@ -19,10 +19,18 @@ const getAllUsers = async (req, res) => {
             return res.status(400).json({message: 'Не удалось получить сотрудников'})
         }
 
-        res.status(200).json(users)
+        const usersForResponse = users.map(user => ({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            companyId: user.companyId
+        }))
+
+        res.status(200).json(usersForResponse)
 
     } catch (e) {
-        return res.status(400).json({message: 'Что-то не так на бэке'})
+        console.error('Ошибка при получении сотрудников:', e) // Логирование ошибки для отладки
+        return res.status(400).json({message: 'Что-то не так'})
     }
 
 }

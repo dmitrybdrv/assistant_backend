@@ -33,7 +33,8 @@ const getMarketplaceById = async (req, res) => {
         res.status(200).json(marketplace)
 
     } catch (e) {
-        return res.status(400).json({ message: 'Что-то не так на бэке'})
+        console.error('Ошибка при получении маркептплейса:', e) // Логирование ошибки для отладки
+        return res.status(400).json({ message: 'Что-то пошло не так'})
     }
 
 }
