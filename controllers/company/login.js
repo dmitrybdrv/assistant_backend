@@ -54,6 +54,7 @@ const login = async (req, res) => {
         }
 
     } catch (e) {
+        console.error('Ошибка при логинизации:', e) // Логирование ошибки для отладки
        return res.status(400).json({message: 'Что-то пошло не так на бэке!'})
     }
 

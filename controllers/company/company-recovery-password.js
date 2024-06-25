@@ -81,6 +81,7 @@ const recovery = async (req, res) => {
         res.status(200).send({message: `Инструкции отправлены на почту ${email}`})
 
     } catch (e) {
+        console.error('Ошибка при востановлении доступа:', e) // Логирование ошибки для отладки
         return res.status(400).json({message: 'Что-то пошло не так на бэке'})
     }
 }

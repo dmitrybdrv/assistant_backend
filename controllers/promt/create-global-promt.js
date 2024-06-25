@@ -4,6 +4,7 @@ const prisma = require('../../prisma/prisma-client')
  * Создание нового GlobalPromt
  * @route PUT /api/promt/create-global-promt
  * @Access Private
+ * @description метод PUT, так как создание происходит сразу после создания company. Создаётся пустой и далее с помощью PUT заполняем
  */
 
 const createGlobalPromt = async (req, res) => {
@@ -11,12 +12,6 @@ const createGlobalPromt = async (req, res) => {
     try {
 
         const {value} = req.body
-
-        // TODO нужно ли данное ограничение - условие - на отсутствие введёного промта
-        // if (value.length <= 0) {
-        //     res.status(400).json({message: 'Промт обязятелен к заполнению'})
-        // }
-        // условие - на количество символов
 
         if (value.length > 1000) {
            return res.status(400).json({message: 'Длина промта не должна превышать 1000 символов'})
@@ -35,7 +30,8 @@ const createGlobalPromt = async (req, res) => {
         res.status(200).json({newPromt, message: 'Промт готов!'})
 
     } catch (e) {
-        return res.status(400).json({message: 'Что-то пошло не так на бэке'})
+        console.error('Ошибка при создании глобального промта:', e) // Логирование ошибки для отладки
+        return res.status(400).json({message: 'Что-то пошло не так'})
     }
 
 }

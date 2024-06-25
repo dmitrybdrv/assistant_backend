@@ -93,6 +93,7 @@ const register = async (req, res) => {
         }
 
     } catch (e) {
+        console.error('Ошибка при регистрации:', e) // Логирование ошибки для отладки
         return res.status(400).json({message: 'Что-то пошло не так на бэке'})
     }
 

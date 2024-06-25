@@ -41,6 +41,7 @@ const createNewPassword = async (req, res) => {
         res.status(200).json({message: 'Пароль успешно изменён'})
 
     } catch (e) {
+        console.error('Ошибка при создании нового пароля:', e) // Логирование ошибки для отладки
         return res.status(400).json({message: 'Что-то пошло не так на бэке'})
     }
 

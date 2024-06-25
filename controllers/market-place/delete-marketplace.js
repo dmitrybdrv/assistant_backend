@@ -7,11 +7,11 @@ const prisma = require('../../prisma/prisma-client')
  */
 const deleteMarketplace = async (req, res) => {
     try {
-        const {id} = req.body;
+        const marketPlaceId = req.params.id;
 
         const marketplace = await prisma.prisma.marketPlace.findFirst({
             where: {
-                id
+                id: marketPlaceId
             }
         })
 
@@ -22,7 +22,7 @@ const deleteMarketplace = async (req, res) => {
 
         await prisma.prisma.marketPlace.delete({
             where: {
-                id,
+                id: marketPlaceId,
                 // админ может удалять только своего пользователя по id
                 companyId: req.company.id
             },
@@ -33,7 +33,8 @@ const deleteMarketplace = async (req, res) => {
         }
 
     } catch (e) {
-        return res.status(500).json({message: 'Что-то не так на бэке'});
+        console.error('Ошибка при удалении маркетплейса:', e) // Логирование ошибки для отладки
+        return res.status(500).json({message: 'Что-то пошло не так'});
     }
 }
 

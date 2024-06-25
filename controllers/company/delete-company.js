@@ -35,6 +35,7 @@ const deleteCompany = async (req, res) => {
         }
 
     } catch (e) {
+        console.error('Ошибка при удалении company:', e) // Логирование ошибки для отладки
         return res.status(500).json({message: 'Что-то не так на бэке'});
     }
 }

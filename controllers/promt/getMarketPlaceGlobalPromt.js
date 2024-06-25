@@ -17,8 +17,6 @@ const getMarketPlaceGlobalPromt = async (req, res) => {
             },
         })
 
-        //TODO падает приложение при доп проверке - почему?
-
         // Если не удалось найти ранее создаваемый промт
         if (!promt) {
            return res.status(400).json({message: 'Промт Маркетплейса не найден!'})

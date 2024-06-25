@@ -65,8 +65,8 @@ const editCompany = async (req, res) => {
         res.status(200).json({company, message: 'Отредактировано!'})
 
     } catch (e) {
-        console.log(e)
-        return res.status(500).json({message: 'Не удалось изменить'})
+        console.error('Ошибка при редактировании:', e) // Логирование ошибки для отладки
+        return res.status(500).json({message: 'Не удалось редактировать'})
     }
 
 }

@@ -8,6 +8,7 @@ const prisma = require('../../prisma/prisma-client')
 const getGlobalPromt = async (req, res) => {
 
     try {
+
         // Объект GlobalPromt (либо пустой объект который принадлежит конкретной компании - админу)
         const promt = await prisma.prisma.globalPromt.findUnique({
             where: {
@@ -17,13 +18,14 @@ const getGlobalPromt = async (req, res) => {
 
         // Если не удалось найти ранее создаваемый промт
         if(!promt) {
-           return res.status(400).json({message: 'Промт не найден!'})
+           return res.status(400).json({message: 'Глобальный промт не найден!'})
         }
 
         res.status(200).json(promt)
 
     } catch (e) {
-       return res.status(400).json({message: 'Что-то не так на бэке'})
+        console.error('Ошибка при получении Глобального промта:', e) // Логирование ошибки для отладки
+       return res.status(400).json({message: 'Что-то пошло не так'})
     }
 
 }

@@ -18,6 +18,7 @@ const current = async (req, res) => {
         res.status(200).json(company)
 
     } catch (e) {
+        console.error('Ошибка при выполнении current:', e) // Логирование ошибки для отладки
         return res.status(400).json({message: 'Что-то пошло не так на бэке'})
     }
 

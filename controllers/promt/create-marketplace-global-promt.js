@@ -10,12 +10,7 @@ const createMarketplaceGlobalPromt = async (req, res) => {
 
     try {
 
-        const {value} = req.body
-
-        // TODO нужно ли данное ограничение - условие - на отсутствие введёного промта
-        // if (value.length <= 0) {
-        //     res.status(400).json({message: 'Промт обязятелен к заполнению'})
-        // }
+        const {value, name} = req.body
 
         // Условие - на количество символов
         if (value.length > 1000) {
@@ -24,18 +19,18 @@ const createMarketplaceGlobalPromt = async (req, res) => {
 
         // Создание Глобального промта Маркетплейса (первоначальное создание)
         const newPromt = await prisma.prisma.marketPlace.create({
-            where: {
-              id: req.company.id
-            },
             data: {
-                marketPlaceGlobalPromt: value
-            }
+                companyId: req.company.id,
+                marketPlaceGlobalPromt: value,
+                name
+            },
         })
 
         res.status(200).json({newPromt, message: 'Промт Маркетплейса готов!'})
 
     } catch (e) {
-        return res.status(400).json({message: 'Что-то пошло не так на бэке'})
+        console.error('Ошибка при создании промта маркетплейса:', e) // Логирование ошибки для отладки
+        return res.status(400).json({message: 'Что-то пошло не так'})
     }
 
 }
